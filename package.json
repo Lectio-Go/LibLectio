@@ -1,0 +1,53 @@
+{
+  "name": "liblectio",
+  "version": "0.0.1",
+  "description": "A library to programmaticly interface with lectio",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "tslint -p tsconfig.json",
+    "test": "echo \"Warning: no test specified\"",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint && npm run format"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lectio-Go/LibLectio.git"
+  },
+  "keywords": [],
+  "author": "Mathias Gredal",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Lectio-Go/LibLectio/issues"
+  },
+  "homepage": "https://github.com/Lectio-Go/LibLectio",
+  "devDependencies": {
+    "@types/cheerio": "^0.22.17",
+    "@types/node": "^13.9.8",
+    "@types/qs": "^6.9.1",
+    "@types/tough-cookie": "^2.3.6",
+    "typescript": "^3.8.3",
+    "prettier": "^2.1.1",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "dotenv": "^8.2.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "axios-cookiejar-support": "^0.5.1",
+    "buffer": "^5.6.0",
+    "date-fns": "^2.11.1",
+    "events": "^3.2.0",
+    "qs": "^6.9.3",
+    "react-native-cheerio": "^1.0.0-rc.4",
+    "tough-cookie": "^4.0.0",
+    "stream": "0.0.2",
+    "url": "^0.11.0",
+    "util": "^0.12.3",
+    "utils": "^0.3.1"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
