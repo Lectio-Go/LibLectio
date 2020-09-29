@@ -1,7 +1,7 @@
 # LibLectio 
 Dette projekt er WIP og burde ikke blive brugt i andre projekter indtil videre.
 
-![Github Actions Status](https://github.com/mathiasgredal/liblectio/workflows/publish/badge.svg)
+![Github Actions Status](https://github.com/Lectio-Go/LibLectio/workflows/publish/badge.svg)
 
 ## Opsætning
 Sørg for at have nodejs og typescript installeret.
