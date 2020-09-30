@@ -11,7 +11,7 @@ if (fs.existsSync('.env')) {
 
 export default {
   /* tslint:disable:no-string-literal */
-  username: String(process.env['USERNAME']),
+  username: String(process.env['LOGINNAME']),
   password: String(process.env['PASSWORD']),
   schoolID: String(process.env['SCHOOLID']),
   /* tslint:enable:no-string-literal */
