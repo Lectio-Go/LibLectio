@@ -6,6 +6,7 @@
     "rules": {
         "no-console": false,
         "variable-name": false,
-        "object-literal-shorthand": false
+        "object-literal-shorthand": false,
+        "no-string-literal": false
     }
 }

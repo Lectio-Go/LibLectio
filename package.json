@@ -1,6 +1,6 @@
 {
   "name": "liblectio",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A library to programmaticly interface with lectio",
   "main": "lib/index.js",
   "scripts": {
@@ -23,7 +23,6 @@
   },
   "homepage": "https://github.com/Lectio-Go/LibLectio",
   "devDependencies": {
-    "@types/cheerio": "^0.22.17",
     "@types/node": "^13.9.8",
     "@types/qs": "^6.9.1",
     "@types/tough-cookie": "^2.3.6",
