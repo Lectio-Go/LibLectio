@@ -35,7 +35,7 @@ export class NodeRequest extends LectioRequest {
 
     async GetCookies() : Promise<Map<string, string>> {
         return new Promise(async (resolve) => {
-            let cookies: Map<string, string> = new Map<string, string>()
+            const cookies: Map<string, string> = new Map<string, string>()
 
             this.cookieJar.toJSON().cookies.forEach((cookie: Cookie.Serialized) => {
                 cookies.set(cookie.key, cookie.value);
