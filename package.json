@@ -35,13 +35,14 @@
   "dependencies": {
     "axios": "^0.19.2",
     "axios-cookiejar-support": "^0.5.1",
+    "axios-cookiejar-support-react-native": "^1.0.0",
     "buffer": "^5.6.0",
     "date-fns": "^2.11.1",
     "events": "^3.2.0",
     "qs": "^6.9.3",
     "react-native-cheerio": "^1.0.0-rc.4",
-    "tough-cookie": "^4.0.0",
     "stream": "0.0.2",
+    "tough-cookie": "^4.0.0",
     "url": "^0.11.0",
     "util": "^0.12.3",
     "utils": "^0.3.1"

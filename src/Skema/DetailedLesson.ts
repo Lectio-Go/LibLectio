@@ -1,4 +1,5 @@
-import axios from 'axios';
+import {LectioRequest, LectioResponse} from '../LectioRequest'
+
 // @ts-ignore
 import cheerio from 'react-native-cheerio';
 
@@ -15,10 +16,10 @@ import {
   IStudent,
 } from './Timetable';
 
-export async function GetDetailedLessonInfo(user: AuthenticatedUser, lessonId: string): Promise<Lesson> {
+export async function GetDetailedLessonInfo(user: AuthenticatedUser, requestHelper: LectioRequest, lessonId: string): Promise<Lesson> {
   const url = `https://www.lectio.dk/lectio/${user.schoolId}/aktivitet/aktivitetforside2.aspx?absid=${lessonId}&lectab=aktivitetsinformation`;
 
-  const response = await axios.get(url, { headers: { Cookie: user.cookie } });
+  const response = await requestHelper.GetLectio(url);
 
   const $ = cheerio.load(response.data);
 
@@ -27,6 +28,7 @@ export async function GetDetailedLessonInfo(user: AuthenticatedUser, lessonId: s
     stop: new Date(),
   };
 
+  
   // ## Parse the date for the lesson
   // In lectio there is the notion of modules and other activities, we use this when parsing the date string
   if ($('div.lectioTabContent tbody tr th:contains("Type:")  ~ td').text().trim() === 'Lektion') {

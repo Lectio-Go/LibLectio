@@ -1,4 +1,5 @@
-import axios from 'axios';
+import {LectioRequest, LectioResponse} from '../LectioRequest'
+
 // @ts-ignore
 import cheerio from 'react-native-cheerio';
 
@@ -16,7 +17,7 @@ import {
 } from './Timetable';
 
 // This provides som details on each lesson but it might be incorrect. To ensure correct info use the GetDetailedTimetable instead.
-export async function GetBriefTimetable(user: AuthenticatedUser, year: number, week: number): Promise<TimetableWeek> {
+export async function GetBriefTimetable(user: AuthenticatedUser, requestHelper: LectioRequest, year: number, week: number): Promise<TimetableWeek> {
   const timetable: TimetableWeek = {
     year: year,
     week: week,
@@ -25,7 +26,7 @@ export async function GetBriefTimetable(user: AuthenticatedUser, year: number, w
   };
 
   // Check if user is authenticated
-  if (!user.isAuthenticated) await user.Authenticate();
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
 
   // First we have to request the proper page, therefore we need the url
   // Because a week needs to be 2 digits we will have to pad a zero in front if the week number is less than 10
@@ -34,7 +35,7 @@ export async function GetBriefTimetable(user: AuthenticatedUser, year: number, w
   const url = `https://www.lectio.dk/lectio/${user.schoolId}/SkemaNy.aspx?type=elev&elevid=${user.studentId}&week=${weekstr}${year}`;
 
   // Now we are ready to make the request
-  const response = await axios.get(url, { headers: { Cookie: user.cookie } });
+  const response = await requestHelper.GetLectio(url);
 
   const $ = cheerio.load(response.data);
 
