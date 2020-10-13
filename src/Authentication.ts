@@ -1,4 +1,4 @@
-import {LectioRequest, LectioResponse} from './LectioRequest'
+import { LectioRequest, LectioResponse } from './LectioRequest';
 
 export interface IAuthenticationResponse {
   text: string;
@@ -62,25 +62,26 @@ export class AuthenticatedUser {
       // Therefore we need to load any page and get the info needed to login
       const url = 'https://www.lectio.dk/lectio/' + this.m_schoolId + '/login.aspx';
 
-      const prelogin_request = await requestHelper.GetLectio(url);;
+      const prelogin_request = await requestHelper.GetLectio(url);
       const request_body = this.ExtractRequestBody(prelogin_request.data);
-
-      if (prelogin_request.headers['set-cookie'][0].indexOf('ASP.NET_SessionId') === -1)
-          throw Error('Unsuccesful authentication');
 
       const login_request = await requestHelper.PostLectio(url, request_body);
 
-      if ((await requestHelper.GetCookies()).has('LastLoginUserName')) {
-        // We have successful authentication
-        this.m_lastAuthenticated = new Date();
-        this.m_studentId = login_request.data.substring(
-          login_request.data.indexOf('elevid=') + 7,
-          login_request.data.indexOf('"', login_request.data.indexOf('elevid=')),
-        );
+      if (login_request.data.includes('Skolen eksisterer ikke')) throw new Error('School does not exist');
 
-      } else throw Error('Unsuccesful authentication');
+      if (login_request.data.includes('Fejl i Brugernavn og/eller adgangskode'))
+        throw new Error('Incorrect login credentials');
+
+      // We have successful authentication
+      this.m_lastAuthenticated = new Date();
+      this.m_studentId = login_request.data.substring(
+        login_request.data.indexOf('elevid=') + 7,
+        login_request.data.indexOf('"', login_request.data.indexOf('elevid=')),
+      );
     } catch (error) {
-      throw error;
+      return new Promise(async (resolve, reject) => {
+        reject(error);
+      });
     }
   }
 

@@ -1,4 +1,4 @@
-import {LectioRequest, LectioResponse} from '../LectioRequest'
+import { LectioRequest, LectioResponse } from '../LectioRequest';
 
 // @ts-ignore
 import cheerio from 'react-native-cheerio';
@@ -17,7 +17,12 @@ import {
 } from './Timetable';
 
 // This provides som details on each lesson but it might be incorrect. To ensure correct info use the GetDetailedTimetable instead.
-export async function GetBriefTimetable(user: AuthenticatedUser, requestHelper: LectioRequest, year: number, week: number): Promise<TimetableWeek> {
+export async function GetBriefTimetable(
+  user: AuthenticatedUser,
+  requestHelper: LectioRequest,
+  year: number,
+  week: number,
+): Promise<TimetableWeek> {
   const timetable: TimetableWeek = {
     year: year,
     week: week,
