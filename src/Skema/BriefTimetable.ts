@@ -33,6 +33,7 @@ export async function GetBriefTimetable(
   // Check if user is authenticated
   if (!user.isAuthenticated) await user.Authenticate(requestHelper);
 
+  
   // First we have to request the proper page, therefore we need the url
   // Because a week needs to be 2 digits we will have to pad a zero in front if the week number is less than 10
   const weekstr: string = week < 10 ? '0' + week : String(week);
