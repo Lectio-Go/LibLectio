@@ -7,4 +7,5 @@ export interface LectioResponse {
 export abstract class LectioRequest {
   abstract async GetLectio(url: string): Promise<LectioResponse>;
   abstract async PostLectio(url: string, body: any): Promise<LectioResponse>;
+  abstract async UploadLectio(url: string, filename: string, data: string): Promise<LectioResponse>;
 }

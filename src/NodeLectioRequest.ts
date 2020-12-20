@@ -1,39 +1,59 @@
 import { LectioRequest, LectioResponse } from './LectioRequest';
 
 import * as qs from 'qs';
-import { Cookie, CookieJar } from 'tough-cookie';
-import axiosCookieJarSupport from 'axios-cookiejar-support';
-import axios from 'axios';
-import { rejects } from 'assert';
 
-axiosCookieJarSupport(axios);
+import request from 'request'
 
 export class NodeRequest extends LectioRequest {
-  public cookieJar: CookieJar = new CookieJar();
-
   async GetLectio(url: string): Promise<LectioResponse> {
     return new Promise(async (resolve, reject) => {
-      axios
-        .get(url, { jar: this.cookieJar, withCredentials: true })
-        .then((response) => {
-          resolve({ data: response.data, headers: response.headers });
-        })
-        .catch((error) => {
-          reject(error);
-        });
+      request.get({
+        url: url,
+        jar: true
+      }, (err, res) => {
+        if (err)
+          reject(err);
+        resolve({ data: res.body, headers: res.headers });
+      });
     });
   }
 
   async PostLectio(url: string, body: any): Promise<LectioResponse> {
     return new Promise(async (resolve, reject) => {
-      axios
-        .post(url, qs.stringify(body), { jar: this.cookieJar, withCredentials: true })
-        .then((response) => {
-          resolve({ data: response.data, headers: response.headers });
-        })
-        .catch((error) => {
-          reject(error);
-        });
+      request.post({
+        url: url,
+        headers: {'content-type' : 'application/x-www-form-urlencoded'},
+        form: qs.stringify(body),
+        jar: true,
+        followAllRedirects: true
+      }, (err, res) => {
+        if (err)
+          reject(err);
+        resolve({ data: res.body, headers: res.headers });
+      });
+    });
+  }
+
+  async UploadLectio(url: string, filename: string, data: string): Promise<LectioResponse> {
+    return new Promise(async (resolve, reject) => {
+      request({
+        url: url,
+        method: 'POST',
+        followAllRedirects: true,
+        jar: true,
+        formData: {
+          'file': {
+            value: Buffer.from(data, 'base64'),
+            options: {
+              filename: filename
+            }
+          }
+        }
+      }, (err, res) => {
+        if (err)
+          reject(err);
+        resolve({ data: res.body, headers: res.headers });
+      });
     });
   }
 }
