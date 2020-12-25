@@ -72,7 +72,7 @@ export class AuthenticatedUser {
       if (login_request.data.includes('Fejl i Brugernavn og/eller adgangskode'))
         throw new Error('Incorrect login credentials');
 
-      if(login_request.data.includes('Der er ikke oprettet en adgangskode til dette login.'))
+      if (login_request.data.includes('Der er ikke oprettet en adgangskode til dette login.'))
         throw new Error('No password for for this login');
 
       // We have successful authentication

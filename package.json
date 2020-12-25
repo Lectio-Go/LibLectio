@@ -1,6 +1,6 @@
 {
   "name": "liblectio",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "A library to programmaticly interface with lectio",
   "main": "lib/index.js",
   "scripts": {

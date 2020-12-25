@@ -7,7 +7,7 @@ import { AuthenticatedUser } from '../Authentication';
 import { Settings } from 'http2';
 import { title } from 'process';
 
-interface Opgave {
+export interface Opgave {
   uge?: string;
   hold?: string;
   opgavetitel?: string;
@@ -22,7 +22,7 @@ interface Opgave {
   elevnote?: string;
 }
 
-interface DetailedOpgave {
+export interface DetailedOpgave {
   opgavetitel?: string;
   opgavebeskrivelse?: string;
   opgavenote?: string;
