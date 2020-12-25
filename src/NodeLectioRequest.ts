@@ -3,11 +3,10 @@ import { LectioRequest, LectioResponse } from './LectioRequest';
 import * as qs from 'qs';
 
 let request: any;
-if (typeof process !== 'undefined' && process.release.name === 'node') {
+if (typeof navigator === 'undefined' || navigator.product !== 'ReactNative') {
   // tslint:disable-next-line
-  request = require('request');
+  request = eval("require('request')"); // This is bad
 }
-
 export class NodeRequest extends LectioRequest {
   async GetLectio(url: string): Promise<LectioResponse> {
     return new Promise(async (resolve, reject) => {
