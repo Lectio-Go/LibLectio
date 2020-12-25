@@ -3,7 +3,8 @@ import { LectioRequest, LectioResponse } from './LectioRequest';
 import * as qs from 'qs';
 
 let request: any;
-if((typeof process !== 'undefined') && (process.release.name === 'node')) {
+if (typeof process !== 'undefined' && process.release.name === 'node') {
+  // tslint:disable-next-line
   request = require('request');
 }
 
