@@ -2,7 +2,10 @@ import { LectioRequest, LectioResponse } from './LectioRequest';
 
 import * as qs from 'qs';
 
-import request from 'request';
+let request: any;
+if((typeof process !== 'undefined') && (process.release.name === 'node')) {
+  request = require('request');
+}
 
 export class NodeRequest extends LectioRequest {
   async GetLectio(url: string): Promise<LectioResponse> {
@@ -12,7 +15,7 @@ export class NodeRequest extends LectioRequest {
           url: url,
           jar: true,
         },
-        (err, res) => {
+        (err: any, res: any) => {
           if (err) reject(err);
           resolve({ data: res.body, headers: res.headers });
         },
@@ -30,7 +33,7 @@ export class NodeRequest extends LectioRequest {
           jar: true,
           followAllRedirects: true,
         },
-        (err, res) => {
+        (err: any, res: any) => {
           if (err) reject(err);
           resolve({ data: res.body, headers: res.headers });
         },
@@ -62,7 +65,7 @@ export class NodeRequest extends LectioRequest {
             },
           },
         },
-        (err, res) => {
+        (err: any, res: any) => {
           if (err) reject(err);
           resolve({ data: res.body, headers: res.headers });
         },
