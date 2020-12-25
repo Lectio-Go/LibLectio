@@ -36,11 +36,17 @@ export class NodeRequest extends LectioRequest {
 
   async UploadLectio(url: string, filename: string, data: string): Promise<LectioResponse> {
     return new Promise(async (resolve, reject) => {
-      request({
+      request.post({
         url: url,
-        method: 'POST',
         followAllRedirects: true,
         jar: true,
+        headers: {
+          "sec-fetch-dest": "iframe",
+          "sec-fetch-mode": "navigate",
+          "sec-fetch-site": "same-origin",
+          "referer": "https://www.lectio.dk/lectio/165/documentchoosercontent.aspx?year=2020&ispublic=0&showcheckbox=1&mode=pickfile",
+        },
+        
         formData: {
           'file': {
             value: Buffer.from(data, 'base64'),
