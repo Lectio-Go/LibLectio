@@ -1,11 +1,9 @@
-import { LectioRequest, LectioResponse } from '../LectioRequest';
-
 // @ts-ignore
 import cheerio from 'react-native-cheerio';
+import { parse } from 'date-fns';
 
+import { LectioRequest, LectioResponse } from '../LectioRequest';
 import { AuthenticatedUser } from '../Authentication';
-import { Settings } from 'http2';
-import { title } from 'process';
 
 export interface Opgave {
   uge?: string;
@@ -67,7 +65,7 @@ export async function hentOpgaver(user: AuthenticatedUser, requestHelper: Lectio
     if (yeet !== null) {
       opgave.id = yeet.substring(yeet.lastIndexOf('exerciseid=') + 11, yeet.lastIndexOf('&amp;prevurl'));
     }
-    opgave.frist = whoKnows('td:nth-child(4)').text();
+    opgave.frist = parse(whoKnows('td:nth-child(4)').text(), 'd/M-yyyy HH:mm', new Date()).toString();
     opgave.elevtid = whoKnows('td:nth-child(5)').text();
     opgave.status = whoKnows('td:nth-child(6)').text();
     opgave.fravaer = whoKnows('td:nth-child(7)').text();
