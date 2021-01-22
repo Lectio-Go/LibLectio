@@ -31,8 +31,7 @@ export async function GetBriefTimetable(
   };
 
   // Check if user is authenticated
-  // TODO: Authentication check does not work
-  // if (!user.isAuthenticated) await user.Authenticate(requestHelper);
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
 
   // First we have to request the proper page, therefore we need the url
   // Because a week needs to be 2 digits we will have to pad a zero in front if the week number is less than 10
@@ -48,8 +47,6 @@ export async function GetBriefTimetable(
   for (const elem of $('.s2skemabrik.s2bgbox').toArray()) {
     timetable.lessons.push(GetBriefLessonInfoFromHTML(elem));
   }
-
-  console.log(timetable.lessons[0]);
 
   return timetable;
 }
@@ -110,8 +107,6 @@ function GetBriefLessonInfoFromHTML(html: CheerioElement): Lesson {
   if (title !== '') {
     lesson.lessonTitle = title;
   }
-
-  console.log(lesson);
 
   return lesson;
 }

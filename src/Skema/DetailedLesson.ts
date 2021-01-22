@@ -21,6 +21,8 @@ export async function GetDetailedLessonInfo(
   requestHelper: LectioRequest,
   lessonId: string,
 ): Promise<Lesson> {
+  // Check if user is authenticated
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
   const url = `https://www.lectio.dk/lectio/${user.schoolId}/aktivitet/aktivitetforside2.aspx?absid=${lessonId}&lectab=aktivitetsinformation`;
 
   const response = await requestHelper.GetLectio(url);
