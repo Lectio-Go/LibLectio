@@ -47,7 +47,7 @@ export class AuthenticatedUser {
   public get isAuthenticated(): boolean {
     // We get a timeout after 2340 seconds and a warning after 1800 seconds as shown by running  window.SessionHelper.Instance._secondsUntilTimeout in the lectio javascript console
     // Therefore we are not authenticated after that period and need to relogin
-    return (new Date().getTime() - this.m_lastAuthenticated.getTime() <= 2340e3);
+    return new Date().getTime() - this.m_lastAuthenticated.getTime() <= 2340e3;
   }
 
   async Authenticate(requestHelper: LectioRequest) {
