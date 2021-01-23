@@ -29,7 +29,7 @@ export class AuthenticatedUser {
   private m_schoolId: string;
   private m_studentId: string = '';
   private m_authenticationCookie: string = '';
-  private m_lastAuthenticated: Date = new Date();
+  private m_lastAuthenticated: Date = new Date(0);
 
   // Public
   public get cookie(): string {
@@ -47,11 +47,7 @@ export class AuthenticatedUser {
   public get isAuthenticated(): boolean {
     // We get a timeout after 2340 seconds and a warning after 1800 seconds as shown by running  window.SessionHelper.Instance._secondsUntilTimeout in the lectio javascript console
     // Therefore we are not authenticated after that period and need to relogin
-    if (new Date().getTime() - this.m_lastAuthenticated.getTime() <= 2340e3) {
-      return false; // We are no longer authenticated and need to relogin
-    } else {
-      return true;
-    }
+    return (new Date().getTime() - this.m_lastAuthenticated.getTime() <= 2340e3);
   }
 
   async Authenticate(requestHelper: LectioRequest) {
