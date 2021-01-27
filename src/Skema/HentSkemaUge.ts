@@ -2,6 +2,7 @@ import { LectioRequest, LectioResponse } from '../LectioRequest';
 
 // @ts-ignore
 import cheerio from 'react-native-cheerio';
+import { getDay, getISODay, parse } from 'date-fns';
 
 import { AuthenticatedUser } from '../Authentication';
 import {
@@ -17,7 +18,7 @@ import {
 } from './Timetable';
 
 // This provides som details on each lesson but it might be incorrect. To ensure correct info use the GetDetailedTimetable instead.
-export async function GetBriefTimetable(
+export async function HentSkemaUge(
   user: AuthenticatedUser,
   requestHelper: LectioRequest,
   year: number,
@@ -26,8 +27,15 @@ export async function GetBriefTimetable(
   const timetable: TimetableWeek = {
     year: year,
     week: week,
-    lessons: [],
+    mon: [],
+    tue: [],
+    wed: [],
+    thu: [],
+    fri: [],
+    sat: [],
+    sun: [],
     dailyMessage: [],
+    moduleTimes: [],
   };
 
   // Check if user is authenticated
@@ -45,7 +53,42 @@ export async function GetBriefTimetable(
   const $ = cheerio.load(response.data);
 
   for (const elem of $('.s2skemabrik.s2bgbox').toArray()) {
-    timetable.lessons.push(GetBriefLessonInfoFromHTML(elem));
+    const lesson = GetBriefLessonInfoFromHTML(elem);
+
+    switch (getISODay(lesson.start)) {
+      case 1:
+        timetable.mon.push(lesson);
+        break;
+      case 2:
+        timetable.tue.push(lesson);
+        break;
+      case 3:
+        timetable.wed.push(lesson);
+        break;
+      case 4:
+        timetable.thu.push(lesson);
+        break;
+      case 5:
+        timetable.fri.push(lesson);
+        break;
+      case 6:
+        timetable.sat.push(lesson);
+        break;
+      case 7:
+        timetable.sun.push(lesson);
+        break;
+    }
+  }
+
+  for (const elem of $('.s2module-info div').toArray()) {
+    const moduleTimeString: string = cheerio(elem).html()!; // Looks like this: 1. modul<br>8:15 - 9:15
+
+    const moduleIndex = moduleTimeString.substring(0, moduleTimeString.indexOf('. modul<br>'));
+    const timeInterval = moduleTimeString.substring(moduleTimeString.indexOf('. modul<br>') + 11);
+    const startTime = parse(timeInterval.substring(0, timeInterval.indexOf(' - ')), 'H:m', 0);
+    const stopTime = parse(timeInterval.substring(timeInterval.indexOf(' - ') + 3), 'H:m', 0);
+
+    timetable.moduleTimes.push({ index: Number(moduleIndex), start: startTime, stop: stopTime });
   }
 
   return timetable;
@@ -146,7 +189,7 @@ function ParseDataContextCards(contextCards: CheerioElement[]): [ITeacher[], ITe
     <span data-lectiocontextcard="HE31695660521">S 2y Ti</span> 
     <span data-lectiocontextcard="HE31683454720">S 2z TI</span>
     <img alt="" src="/lectio/img/transparent.png" class="s2seperator">
-    ​<span data-lectiocontextcard="T26546323827">jhmo</span> 
+     <span data-lectiocontextcard="T26546323827">jhmo</span> 
     <span data-lectiocontextcard="T26546202344">maho</span> 
     <span data-lectiocontextcard="T29670238343">miws</span> 
     <span data-lectiocontextcard="T26546121332">pchr</span>
