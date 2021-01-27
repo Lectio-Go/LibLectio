@@ -4,4 +4,4 @@ export { GetAllSchools, ISchool } from './SchoolList';
 export { NodeRequest } from './NodeLectioRequest';
 export { hentOpgaver, detailedOpgaver } from './Opaver/opgaver';
 export { Item, ItemType, UploadDocument } from './Dokumenter/HentDokumenter';
-export { Beskedliste } from './Beskeder/beskeder';
+export { hentBeskedliste } from './Beskeder/beskeder';

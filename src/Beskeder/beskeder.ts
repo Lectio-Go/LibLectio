@@ -17,8 +17,8 @@ export interface Besked{
 
 }
 
-export async function Beskedliste(user: AuthenticatedUser, requestHelper: LectioRequest): Promise<Besked[]> {
-    const opgaver: Besked[] = [];
+export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: LectioRequest): Promise<Besked[]> {
+    const beskeder: Besked[] = [];
   
     if (!user.isAuthenticated) await user.Authenticate(requestHelper);
   
@@ -26,32 +26,25 @@ export async function Beskedliste(user: AuthenticatedUser, requestHelper: Lectio
 
     const response = await requestHelper.GetLectio(url);
   
-    // ________________________________________________________________________________________________
+    
     const $ = cheerio.load(response.data);
   
-    for (const k of $('#printStudentAssignmentsArea tr').toArray()) {
-      const whoKnows = cheerio.load(k);
-      const opgave: Opgave = {};
-      opgave.uge = whoKnows('td:nth-child(1) span').attr('title');
-      opgave.hold = whoKnows('td:nth-child(2) span').text();
-      opgave.opgavetitel = whoKnows('td:nth-child(3) span').text();
-  
-      const yeet = whoKnows('td:nth-child(3) span').html();
-      if (yeet !== null) {
-        opgave.id = yeet.substring(yeet.lastIndexOf('exerciseid=') + 11, yeet.lastIndexOf('&amp;prevurl'));
+    for (const k of $('#s_m_Content_Content_threadGV_ctl00 tr').toArray()) {
+      const beskedTable = cheerio.load(k);
+      const besked: Besked = {};
+
+      const tempString = beskedTable('td:nth-child(3)').html();
+      if(tempString !== null){
+        if(tempString.substring(tempString.lastIndexOf('src="/lectio/img/') + 17, tempString.lastIndexOf('src="/lectio/img/') + 20 ) === 'mun'){
+          besked.Aaben = false;
+        }else{
+          besked.Aaben = true;
+        }
       }
-      opgave.frist = parse(whoKnows('td:nth-child(4)').text(), 'd/M-yyyy HH:mm', new Date()).toString();
-      opgave.elevtid = whoKnows('td:nth-child(5)').text();
-      opgave.status = whoKnows('td:nth-child(6)').text();
-      opgave.fravaer = whoKnows('td:nth-child(7)').text();
-      opgave.afventer = whoKnows('td:nth-child(8)').text();
-      opgave.opgavenote = whoKnows('td:nth-child(9)').text();
-      opgave.karater = whoKnows('td:nth-child(10)').text();
-      opgave.elevnote = whoKnows('td:nth-child(11)').text();
-      opgaver.push(opgave);
+      beskeder.push(besked);
     }
   
-    opgaver.shift();
+    beskeder.shift();
   
-    return opgaver;
+    return beskeder;
   }
