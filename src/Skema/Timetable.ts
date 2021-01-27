@@ -81,7 +81,7 @@ export interface TimetableWeek {
   sat: Lesson[];
   sun: Lesson[];
   dailyMessage: string[];
-  moduleTimes: { start: Date; stop: Date }[];
+  moduleTimes: { index: number; start: Date; stop: Date }[];
 }
 
 export function ParseDateString(datestr: string): [Date, Date] {

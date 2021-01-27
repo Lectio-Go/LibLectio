@@ -88,7 +88,7 @@ export async function HentSkemaUge(
     const startTime = parse(timeInterval.substring(0, timeInterval.indexOf(' - ')), 'H:m', 0);
     const stopTime = parse(timeInterval.substring(timeInterval.indexOf(' - ') + 3), 'H:m', 0);
 
-    timetable.moduleTimes.push({ start: startTime, stop: stopTime });
+    timetable.moduleTimes.push({ index: Number(moduleIndex), start: startTime, stop: stopTime });
   }
 
   return timetable;
