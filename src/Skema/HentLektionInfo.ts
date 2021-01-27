@@ -16,7 +16,7 @@ import {
   IStudent,
 } from './Timetable';
 
-export async function GetDetailedLessonInfo(
+export async function HentLektionInfo(
   user: AuthenticatedUser,
   requestHelper: LectioRequest,
   lessonId: string,

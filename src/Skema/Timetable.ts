@@ -1,7 +1,7 @@
 import parse from 'date-fns/parse';
 
-export * from './BriefTimetable';
-export * from './DetailedLesson';
+export * from './HentSkemaUge';
+export * from './HentLektionInfo';
 
 export enum LessonState {
   Cancelled = 'Cancelled',
@@ -73,8 +73,15 @@ export interface Lesson {
 export interface TimetableWeek {
   year: number;
   week: number;
-  lessons: Lesson[];
+  mon: Lesson[];
+  tue: Lesson[];
+  wed: Lesson[];
+  thu: Lesson[];
+  fri: Lesson[];
+  sat: Lesson[];
+  sun: Lesson[];
   dailyMessage: string[];
+  moduleTimes: { start: Date; stop: Date }[];
 }
 
 export function ParseDateString(datestr: string): [Date, Date] {
@@ -92,8 +99,4 @@ export function ParseDateString(datestr: string): [Date, Date] {
   // console.log("stop: "+endDate.toTimeString())
 
   return [startDate, endDate];
-}
-
-export interface Times{
-
 }
