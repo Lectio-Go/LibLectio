@@ -93,3 +93,7 @@ export function ParseDateString(datestr: string): [Date, Date] {
 
   return [startDate, endDate];
 }
+
+export interface Times{
+
+}
