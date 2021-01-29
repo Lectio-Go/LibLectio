@@ -17,6 +17,14 @@ export interface Besked{
 
 }
 
+export interface beskedTråd{
+Titel?: string;
+fra?: string;
+til?: string[];
+
+}
+
+
 export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: LectioRequest): Promise<Besked[]> {
     const beskeder: Besked[] = [];
   
@@ -48,7 +56,7 @@ export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: Le
       let modtagerString = beskedTable('td:nth-child(7)').html();
       besked.Modtagere = [];
       if(modtagerString !== null){
-          modtagerString = modtagerString.substring(modtagerString.lastIndexOf('<span title="') + 13, modtagerString.lastIndexOf('" class="tooltip"><img src="/lectio/img/class.auto'));
+          modtagerString = modtagerString.substring(modtagerString.lastIndexOf('<span title="') + 13, modtagerString.lastIndexOf('" class="tooltip"><img src="/lectio/img/'));
           const index = (modtagerString.match(/\n/g)||[]).length+1;
           for(let k = 0; k < index; k++ ){
             let dString: string = modtagerString.substring(modtagerString.lastIndexOf('\n')+1);
@@ -92,4 +100,4 @@ export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: Le
     beskeder.shift();
   
     return beskeder;
-  }
+}
