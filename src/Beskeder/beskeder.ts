@@ -4,6 +4,8 @@ import { parse } from 'date-fns';
 
 import { LectioRequest, LectioResponse } from '../LectioRequest';
 import { AuthenticatedUser } from '../Authentication';
+import { profileEnd } from 'console';
+import { threadId } from 'worker_threads';
 
 export interface Besked{
 
@@ -17,10 +19,19 @@ export interface Besked{
 
 }
 
+export interface beskedBlok{
+  Emne?: string;
+  Fra?: string;
+  Tidspunkt?: Date;
+  Indent?: string;
+
+}
+
 export interface beskedTråd{
-Titel?: string;
-fra?: string;
-til?: string[];
+  Titel?: string;
+  Fra?: string;
+  Til?: string[];
+  Tråd?: beskedBlok[];
 
 }
 
@@ -36,7 +47,8 @@ export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: Le
   
     
     const $ = cheerio.load(response.data);
-  
+
+
     for (const k of $('#s_m_Content_Content_threadGV_ctl00 tr').toArray()) {
       const beskedTable = cheerio.load(k);
       const besked: Besked = {};
@@ -101,3 +113,33 @@ export async function hentBeskedliste(user: AuthenticatedUser, requestHelper: Le
   
     return beskeder;
 }
+
+export async function hentThread(user: AuthenticatedUser, requestHelper: LectioRequest, beskedId: string): Promise<beskedTråd> {
+  const Thread: beskedTråd = {};
+
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
+
+  const url = `https://www.lectio.dk/lectio/${user.schoolId}/beskeder2.aspx?type=showthread&elevid=${user.studentId}&id=${beskedId}`;
+
+  
+  const response = await requestHelper.GetLectio(url);
+
+  
+  const $ = cheerio.load(response.data);
+
+  Thread.Titel = $('.maxWidth:not(.textTop) td:nth-child(2)').text().replace(/\t/g, '').replace(/\n/g, '');
+  Thread.Fra = $('.maxWidth.textTop tr:nth-child(1) td:nth-child(3)').text().replace(/\t/g, '').replace(/\n/g, '');
+
+
+  Thread.Til = [];
+  for (const i of $('.maxWidth.textTop tr:nth-child(2) td:nth-child(3)').toArray()) {
+    const j = cheerio.load(i);
+    Thread.Til.push(i('').text());
+  }
+
+  // $('.maxWidth:not(.textTop)')
+  // $('#s_m_Content_Content_ThreadList li tr td:nth-child(1)')
+
+  return Thread;
+}
+

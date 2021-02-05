@@ -5,6 +5,7 @@ import { parse } from 'date-fns';
 import { LectioRequest, LectioResponse } from '../LectioRequest';
 import { AuthenticatedUser } from '../Authentication';
 
+
 export interface Opgave {
   uge?: string;
   hold?: string;
