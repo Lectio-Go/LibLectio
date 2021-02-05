@@ -57,7 +57,7 @@ export async function hentOpgaver(user: AuthenticatedUser, requestHelper: Lectio
   for (const k of $('#printStudentAssignmentsArea tr').toArray()) {
     const whoKnows = cheerio.load(k);
     const opgave: Opgave = {};
-    opgave.uge = whoKnows('td:nth-child(1) span').attr('title');
+    opgave.uge = whoKnows('td:nth-child(1) span').text();
     opgave.hold = whoKnows('td:nth-child(2) span').text();
     opgave.opgavetitel = whoKnows('td:nth-child(3) span').text();
 
