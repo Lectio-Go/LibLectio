@@ -4,8 +4,6 @@ import { parse } from 'date-fns';
 
 import { LectioRequest, LectioResponse } from '../LectioRequest';
 import { AuthenticatedUser } from '../Authentication';
-import { profileEnd } from 'console';
-import { threadId } from 'worker_threads';
 
 export interface Besked{
 
@@ -132,9 +130,8 @@ export async function hentThread(user: AuthenticatedUser, requestHelper: LectioR
 
 
   Thread.Til = [];
-  for (const i of $('.maxWidth.textTop tr:nth-child(2) td:nth-child(3)').toArray()) {
-    const j = cheerio.load(i);
-    Thread.Til.push(i('').text());
+  for (let i = 1; i <= $('.maxWidth.textTop tr:nth-child(2) td:nth-child(3) span').length; i++) {
+    Thread.Til.push($('.maxWidth.textTop tr:nth-child(2) td:nth-child(3) span:nth-child('+i+')').text());
   }
 
   // $('.maxWidth:not(.textTop)')
