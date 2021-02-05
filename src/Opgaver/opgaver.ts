@@ -50,61 +50,61 @@ export interface DetailedOpgave {
 export async function hentOpgaver(user: AuthenticatedUser, requestHelper: LectioRequest): Promise<Opgave[]> {
   const opgaver: Opgave[] = [];
 
-  // if (!user.isAuthenticated) await user.Authenticate(requestHelper);
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
 
-  // const url = `https://www.lectio.dk/lectio/${user.schoolId}/OpgaverElev.aspx?elevid=${user.studentId}`;
+  const url = `https://www.lectio.dk/lectio/${user.schoolId}/OpgaverElev.aspx?elevid=${user.studentId}`;
 
-  // // We have to make a special request to access all the tasks
-  // const preOpgaveRequest = await requestHelper.GetLectio(url);
-  // const pre = cheerio.load(preOpgaveRequest.data);
+  // We have to make a special request to access all the tasks
+  const preOpgaveRequest = await requestHelper.GetLectio(url);
+  const pre = cheerio.load(preOpgaveRequest.data);
 
-  // const opgaveRequestBody = {
-  //   time: 0,
-  //   __EVENTTARGET: 's$m$Content$Content$ShowThisTermOnlyCB',
-  //   __EVENTARGUMENT: '',
-  //   __LASTFOCUS: '',
-  //   __SCROLLPOSITION: '',
-  //   __VIEWSTATEX: pre('#__VIEWSTATEX').toArray()[0].attribs['value'],
-  //   __VIEWSTATEY_KEY: '',
-  //   __VIEWSTATE: '',
-  //   __VIEWSTATEENCRYPTED: '',
-  //   __EVENTVALIDATION: pre('#__EVENTVALIDATION').toArray()[0].attribs['value'],
-  //   s$m$searchinputfield: '',
-  //   s$m$Content$Content$ShowHoldElementDD: '',
-  //   LectioPostbackId: '',
-  // };
+  const opgaveRequestBody = {
+    time: 0,
+    __EVENTTARGET: 's$m$Content$Content$ShowThisTermOnlyCB',
+    __EVENTARGUMENT: '',
+    __LASTFOCUS: '',
+    __SCROLLPOSITION: '',
+    __VIEWSTATEX: pre('#__VIEWSTATEX').toArray()[0].attribs['value'],
+    __VIEWSTATEY_KEY: '',
+    __VIEWSTATE: '',
+    __VIEWSTATEENCRYPTED: '',
+    __EVENTVALIDATION: pre('#__EVENTVALIDATION').toArray()[0].attribs['value'],
+    s$m$searchinputfield: '',
+    s$m$Content$Content$ShowHoldElementDD: '',
+    LectioPostbackId: '',
+  };
 
-  // const response = await requestHelper.PostLectio(
-  //   'https://www.lectio.dk/lectio/165/OpgaverElev.aspx?elevid=31487804135',
-  //   opgaveRequestBody,
-  // );
+  const response = await requestHelper.PostLectio(
+    'https://www.lectio.dk/lectio/165/OpgaverElev.aspx?elevid=31487804135',
+    opgaveRequestBody,
+  );
 
-  // // Now we have all the tasks
-  // const $ = cheerio.load(response.data);
+  // Now we have all the tasks
+  const $ = cheerio.load(response.data);
 
-  // for (const k of $('#printStudentAssignmentsArea tr').toArray()) {
-  //   const whoKnows = cheerio.load(k);
-  //   const opgave: Opgave = {};
-  //   opgave.uge = whoKnows('td:nth-child(1) span').text();
-  //   opgave.hold = whoKnows('td:nth-child(2) span').text();
-  //   opgave.opgavetitel = whoKnows('td:nth-child(3) span').text();
+  for (const k of $('#printStudentAssignmentsArea tr').toArray()) {
+    const whoKnows = cheerio.load(k);
+    const opgave: Opgave = {};
+    opgave.uge = whoKnows('td:nth-child(1) span').text();
+    opgave.hold = whoKnows('td:nth-child(2) span').text();
+    opgave.opgavetitel = whoKnows('td:nth-child(3) span').text();
 
-  //   const yeet = whoKnows('td:nth-child(3) span').html();
-  //   if (yeet !== null) {
-  //     opgave.id = yeet.substring(yeet.lastIndexOf('exerciseid=') + 11, yeet.lastIndexOf('&amp;prevurl'));
-  //   }
-  //   opgave.frist = parse(whoKnows('td:nth-child(4)').text(), 'd/M-yyyy HH:mm', new Date()).toString();
-  //   opgave.elevtid = whoKnows('td:nth-child(5)').text();
-  //   opgave.status = whoKnows('td:nth-child(6)').text();
-  //   opgave.fravaer = whoKnows('td:nth-child(7)').text();
-  //   opgave.afventer = whoKnows('td:nth-child(8)').text();
-  //   opgave.opgavenote = whoKnows('td:nth-child(9)').text();
-  //   opgave.karater = whoKnows('td:nth-child(10)').text();
-  //   opgave.elevnote = whoKnows('td:nth-child(11)').text();
-  //   opgaver.push(opgave);
-  // }
+    const yeet = whoKnows('td:nth-child(3) span').html();
+    if (yeet !== null) {
+      opgave.id = yeet.substring(yeet.lastIndexOf('exerciseid=') + 11, yeet.lastIndexOf('&amp;prevurl'));
+    }
+    opgave.frist = parse(whoKnows('td:nth-child(4)').text(), 'd/M-yyyy HH:mm', new Date()).toString();
+    opgave.elevtid = whoKnows('td:nth-child(5)').text();
+    opgave.status = whoKnows('td:nth-child(6)').text();
+    opgave.fravaer = whoKnows('td:nth-child(7)').text();
+    opgave.afventer = whoKnows('td:nth-child(8)').text();
+    opgave.opgavenote = whoKnows('td:nth-child(9)').text();
+    opgave.karater = whoKnows('td:nth-child(10)').text();
+    opgave.elevnote = whoKnows('td:nth-child(11)').text();
+    opgaver.push(opgave);
+  }
 
-  // opgaver.shift();
+  opgaver.shift();
 
   return opgaver;
 }
