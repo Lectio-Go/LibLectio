@@ -1,10 +1,11 @@
 {
   "name": "liblectio",
-  "version": "0.0.24",
+  "version": "0.0.26",
   "description": "A library to programmaticly interface with lectio",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
+    "watch": "tsc -w",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
     "test": "echo \"Warning: no test specified\"",
