@@ -8,9 +8,10 @@ const lectioHelper = new NodeRequest();
 user.Authenticate(lectioHelper)
   .then(async () => {
         
-    // let opgaveInfo = await detailedOpgaver(user, lectioHelper, '44047303516');
+    let opgaveInfo = await detailedOpgaver(user, lectioHelper, '44047303516');
     let opgaver = await hentOpgaver(user, lectioHelper);
     console.log(opgaver)
+    console.log(opgaveInfo)
   })
   .catch((error) => {
     console.log('ERROR: ' + error.message);
