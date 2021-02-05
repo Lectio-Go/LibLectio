@@ -116,91 +116,91 @@ export async function detailedOpgaver(
 ): Promise<DetailedOpgave> {
   const opgave: DetailedOpgave = {};
 
-  // if (!user.isAuthenticated) await user.Authenticate(requestHelper);
+  if (!user.isAuthenticated) await user.Authenticate(requestHelper);
 
-  // const url = `https://www.lectio.dk/lectio/${user.schoolId}/ElevAflevering.aspx?elevid=${user.studentId}&exerciseid=${exerciseid}`;
+  const url = `https://www.lectio.dk/lectio/${user.schoolId}/ElevAflevering.aspx?elevid=${user.studentId}&exerciseid=${exerciseid}`;
 
-  // const response = await requestHelper.GetLectio(url);
+  const response = await requestHelper.GetLectio(url);
 
-  // const $ = cheerio.load(response.data);
+  const $ = cheerio.load(response.data);
 
-  // // the first table
-  // opgave.opgavetitel = $('#m_Content_registerAfl_pa tr th:contains("Opgavetitel")  ~ td span').text();
-  // opgave.opgavenote = $('#m_Content_registerAfl_pa tr th:contains("Opgavenote")  ~ td').text();
-  // opgave.hold = {
-  //   team: $('#m_Content_registerAfl_pa tr th:contains("Hold")  ~ td span').text(),
-  //   teamId: $('#m_Content_registerAfl_pa tr th:contains("Hold")  ~ td span').attr('data-lectiocontextcard'),
-  // };
-  // opgave.karaterskala = $('#m_Content_registerAfl_pa tr th:contains("Karakterskala")  ~ td span').text();
-  // opgave.ansvarlig = {
-  //   teacherName: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span')
-  //     .text()
-  //     .match(/^.*?(?=\s\()/)![0], // Gets everything before paranthethes
-  //   teacherInitials: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span')
-  //     .text()
-  //     .match(/\(([^)]+)\)/)![1], // Gets everything inside paranthethes
-  //   teacherId: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span').attr('data-lectiocontextcard'),
-  // };
-  // opgave.elevtid = Number(
-  //   $('#m_Content_registerAfl_pa tr th:contains("Elevtid")  ~ td span')
-  //     .text()
-  //     .match(/[^a-zA-Z-\s]/g)![0]
-  //     .replace(',', '.'),
-  // );
-  // opgave.afleveringsfrist = parse(
-  //   $('#m_Content_registerAfl_pa tr th:contains("Afleveringsfrist")  ~ td').text(),
-  //   'd/M-yyyy HH:mm',
-  //   new Date(),
-  // );
+  // the first table
+  opgave.opgavetitel = $('#m_Content_registerAfl_pa tr th:contains("Opgavetitel")  ~ td span').text();
+  opgave.opgavenote = $('#m_Content_registerAfl_pa tr th:contains("Opgavenote")  ~ td').text();
+  opgave.hold = {
+    team: $('#m_Content_registerAfl_pa tr th:contains("Hold")  ~ td span').text(),
+    teamId: $('#m_Content_registerAfl_pa tr th:contains("Hold")  ~ td span').attr('data-lectiocontextcard'),
+  };
+  opgave.karaterskala = $('#m_Content_registerAfl_pa tr th:contains("Karakterskala")  ~ td span').text();
+  opgave.ansvarlig = {
+    teacherName: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span')
+      .text()
+      .match(/^([^(])+/)![0], // Gets everything before paranthethes
+    teacherInitials: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span')
+      .text()
+      .match(/\(([^)]+)\)/)![1], // Gets everything inside paranthethes
+    teacherId: $('#m_Content_registerAfl_pa tr th:contains("Ansvarlig")  ~ td span').attr('data-lectiocontextcard'),
+  };
+  opgave.elevtid = Number(
+    $('#m_Content_registerAfl_pa tr th:contains("Elevtid")  ~ td span')
+      .text()
+      .match(/[^a-zA-Z-\s]/g)![0]
+      .replace(',', '.'),
+  );
+  opgave.afleveringsfrist = parse(
+    $('#m_Content_registerAfl_pa tr th:contains("Afleveringsfrist")  ~ td').text(),
+    'd/M-yyyy HH:mm',
+    new Date(),
+  );
 
-  // // second table
-  // opgave.gruppemedlemmer = [];
-  // $('#m_Content_groupMembersGV span').each((i) => {
-  //   opgave.gruppemedlemmer!.push({
-  //     studentName: $(`#m_Content_groupMembersGV span`)
-  //       .eq(i)
-  //       .text()
-  //       .match(/^([^,])+/g)![0],
-  //     studentClass: $(`#m_Content_groupMembersGV span`)
-  //       .eq(i)
-  //       .text()
-  //       .match(/(?<=\,).*/g)![0],
-  //     studentId: $(`#m_Content_groupMembersGV span`).eq(i).attr('data-lectiocontextcard'),
-  //   });
-  // });
+  // second table
+  opgave.gruppemedlemmer = [];
+  $('#m_Content_groupMembersGV span').each((i) => {
+    opgave.gruppemedlemmer!.push({
+      studentName: $(`#m_Content_groupMembersGV span`)
+        .eq(i)
+        .text()
+        .match(/^([^,])+/g)![0],
+      studentClass: $(`#m_Content_groupMembersGV span`)
+        .eq(i)
+        .text()
+        .match(/[^,]*$/g)![0],
+      studentId: $(`#m_Content_groupMembersGV span`).eq(i).attr('data-lectiocontextcard'),
+    });
+  });
 
-  // // third table
-  // const tablethree = $('#m_Content_StudentGV tr td');
+  // third table
+  const tablethree = $('#m_Content_StudentGV tr td');
 
-  // // opgave.elev = tablethree.eq(1).text();
-  // opgave.afventer = tablethree.eq(2).text();
-  // opgave.status_fravaer = tablethree.eq(3).text().replace(/\t/g, '').replace(/\n/g, '');
-  // opgave.afsluttet = tablethree.eq(4).attr('checked');
-  // opgave.karater = tablethree.eq(5).text().replace(/\t/g, '').replace(/\n/g, '');
-  // opgave.karaternote = tablethree.eq(6).text().replace(/\t/g, '').replace(/\n/g, '');
-  // opgave.elevnote = tablethree.eq(7).text().replace(/\t/g, '').replace(/\n/g, '');
+  // opgave.elev = tablethree.eq(1).text();
+  opgave.afventer = tablethree.eq(2).text();
+  opgave.status_fravaer = tablethree.eq(3).text().replace(/\t/g, '').replace(/\n/g, '');
+  opgave.afsluttet = tablethree.eq(4).attr('checked');
+  opgave.karater = tablethree.eq(5).text().replace(/\t/g, '').replace(/\n/g, '');
+  opgave.karaternote = tablethree.eq(6).text().replace(/\t/g, '').replace(/\n/g, '');
+  opgave.elevnote = tablethree.eq(7).text().replace(/\t/g, '').replace(/\n/g, '');
 
-  // // fourth table
-  // opgave.indlæg = [];
+  // fourth table
+  opgave.indlæg = [];
 
-  // $('#m_Content_RecipientGV tr')
-  //   .toArray()
-  //   .forEach((row, index) => {
-  //     if (index === 0) return;
-  //     const rowSelect = cheerio.load(row);
-  //     opgave.indlæg!.push({
-  //       tidspunkt: parse(rowSelect('td').first().text(), 'd/M-yyyy HH:mm', new Date()),
-  //       bruger: {
-  //         studentName: rowSelect(`td span`).first().text(),
-  //         studentId: rowSelect(`td span`).first().attr('data-lectiocontextcard'),
-  //       },
-  //       besked: '',
-  //       dokument: {
-  //         navn: rowSelect(`td span a`).first().text(),
-  //         url: 'https://www.lectio.dk' + rowSelect(`td span a`).first().attr('href'),
-  //       },
-  //     });
-  //   });
+  $('#m_Content_RecipientGV tr')
+    .toArray()
+    .forEach((row, index) => {
+      if (index === 0) return;
+      const rowSelect = cheerio.load(row);
+      opgave.indlæg!.push({
+        tidspunkt: parse(rowSelect('td').first().text(), 'd/M-yyyy HH:mm', new Date()),
+        bruger: {
+          studentName: rowSelect(`td span`).first().text(),
+          studentId: rowSelect(`td span`).first().attr('data-lectiocontextcard'),
+        },
+        besked: '',
+        dokument: {
+          navn: rowSelect(`td span a`).first().text(),
+          url: 'https://www.lectio.dk' + rowSelect(`td span a`).first().attr('href'),
+        },
+      });
+    });
 
   return opgave;
 }
