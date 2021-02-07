@@ -4,6 +4,7 @@ import { parse } from 'date-fns';
 
 import { LectioRequest, LectioResponse } from '../LectioRequest';
 import { AuthenticatedUser } from '../Authentication';
+import { stringify } from 'qs';
 
 export interface Besked{
 
@@ -22,6 +23,7 @@ export interface beskedBlok{
   Fra?: string;
   Tidspunkt?: Date;
   Indent?: string;
+  Tekst?: string;
 
 }
 
@@ -119,10 +121,7 @@ export async function hentThread(user: AuthenticatedUser, requestHelper: LectioR
 
   const url = `https://www.lectio.dk/lectio/${user.schoolId}/beskeder2.aspx?type=showthread&elevid=${user.studentId}&id=${beskedId}`;
 
-  
   const response = await requestHelper.GetLectio(url);
-
-  
   const $ = cheerio.load(response.data);
 
   Thread.Titel = $('.maxWidth:not(.textTop) td:nth-child(2)').text().replace(/\t/g, '').replace(/\n/g, '');
@@ -134,9 +133,30 @@ export async function hentThread(user: AuthenticatedUser, requestHelper: LectioR
     Thread.Til.push($('.maxWidth.textTop tr:nth-child(2) td:nth-child(3) span:nth-child('+i+')').text());
   }
 
-  // $('.maxWidth:not(.textTop)')
-  // $('#s_m_Content_Content_ThreadList li tr td:nth-child(1)')
+  Thread.Tråd = [];
 
+  for (const k of $('#s_m_Content_Content_ThreadList li').toArray()) {
+    const li = cheerio.load(k);
+    const bblok: beskedBlok = {};
+
+    bblok.Emne = li('tr td:nth-child(1) h4').text();
+    bblok.Fra = li('tr td:nth-child(1) span').text();
+    let tempString = li('tr td:nth-child(1)').text();
+    tempString = tempString?.substring(tempString.lastIndexOf('),')+3, tempString.length);
+    bblok.Tidspunkt = parse(tempString, 'd/M-yyyy HH:mm', new Date());
+
+
+    const inString = li.html();
+    bblok.Indent = inString?.substring(inString.lastIndexOf('padding-left:')+13, inString.lastIndexOf('em;margin-bottom'));
+
+    bblok.Tekst = li('div').text().replace('\nSendt fra Lectio+\n', '');
+
+  
+    Thread.Tråd.push(bblok);
+
+  }
   return Thread;
+
+  
 }
 
