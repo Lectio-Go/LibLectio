@@ -149,7 +149,7 @@ export async function hentThread(user: AuthenticatedUser, requestHelper: LectioR
     const inString = li.html();
     bblok.Indent = inString?.substring(inString.lastIndexOf('padding-left:')+13, inString.lastIndexOf('em;margin-bottom'));
 
-    bblok.Tekst = li('div').text().replace('\nSendt fra Lectio+\n', '');
+    bblok.Tekst = li('div').text().replace('\nSendt fra Lectio+\n', '').replace('\nSendt fra iOS & Android appen Mit Lectio\n', '');
 
   
     Thread.Tråd.push(bblok);
