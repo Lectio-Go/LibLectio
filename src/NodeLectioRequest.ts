@@ -48,14 +48,6 @@ export class NodeRequest extends LectioRequest {
           url: url,
           followAllRedirects: true,
           jar: true,
-          headers: {
-            'sec-fetch-dest': 'iframe',
-            'sec-fetch-mode': 'navigate',
-            'sec-fetch-site': 'same-origin',
-            referer:
-              'https://www.lectio.dk/lectio/165/documentchoosercontent.aspx?year=2020&ispublic=0&showcheckbox=1&mode=pickfile',
-          },
-
           formData: {
             file: {
               value: Buffer.from(data, 'base64'),

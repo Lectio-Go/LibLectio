@@ -132,9 +132,9 @@ export async function hentThread(user: AuthenticatedUser, requestHelper: LectioR
 
 
   Thread.Til = [];
-  for (const i of $('.maxWidth.textTop tr:nth-child(2) td:nth-child(3)').toArray()) {
+  for (let i of $('.maxWidth.textTop tr:nth-child(2) td:nth-child(3)').toArray()) {
     const j = cheerio.load(i);
-    Thread.Til.push(i('').text());
+    Thread.Til.push(j('').text());
   }
 
   // $('.maxWidth:not(.textTop)')
