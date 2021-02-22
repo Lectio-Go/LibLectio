@@ -75,7 +75,7 @@ export async function hentOpgaver(user: AuthenticatedUser, requestHelper: Lectio
   };
 
   const response = await requestHelper.PostLectio(
-    'https://www.lectio.dk/lectio/165/OpgaverElev.aspx?elevid=${user.studentId}',
+    'https://www.lectio.dk/lectio/${user.schoolId}/OpgaverElev.aspx?elevid=${user.studentId}',
     opgaveRequestBody,
   );
 
