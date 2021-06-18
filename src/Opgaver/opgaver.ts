@@ -29,7 +29,7 @@ export interface Indlæg {
 }
 export interface DetailedOpgave {
   opgavetitel?: string;
-  opgavebeskrivelse?: string;
+  opgavebeskrivelse?: { navn?: string; url?: string };
   opgavenote?: string;
   hold?: ITeam;
   karaterskala?: string;
@@ -200,6 +200,21 @@ export async function detailedOpgaver(
           url: 'https://www.lectio.dk' + rowSelect(`td span a`).first().attr('href'),
         },
       });
+    });
+
+  // Opgave beskrivelse
+  $('#m_Content_opgaverDS_ctl00_showdocumentHyperlnk')
+    .toArray()
+    .forEach((row, index) => {
+      opgave.opgavebeskrivelse = {
+        navn: cheerio
+          .load(row)('a')
+          .first()
+          .text()
+          .match(/^([^(])+/)![0]
+          .trim(),
+        url: 'https://www.lectio.dk' + cheerio.load(row)('a').first().attr('href'),
+      };
     });
 
   return opgave;
