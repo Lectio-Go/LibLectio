@@ -3,15 +3,13 @@ export interface LectioResponse {
   headers: any;
 }
 
-
 /**
  * Base class for implementing networking to Lectio.
  * Any class inheriting from this should implement the singleton pattern, to keep session data like cookies
  */
 export abstract class LectioRequest {
-  
   /**
-   * This function makes GET-requests to Lectio, and decodes the response as UTF-8. 
+   * This function makes GET-requests to Lectio, and decodes the response as UTF-8.
    * If you want to get binary data, you should use the `DownloadLectio` method.
    */
   abstract async GetLectio(url: string): Promise<LectioResponse>;
@@ -32,9 +30,8 @@ export abstract class LectioRequest {
   abstract async UploadLectio(url: string, filename: string, data: string): Promise<LectioResponse>;
 
   /**
-   * This function makes GET-requests to Lectio, and returns the binary response as Base64. 
+   * This function makes GET-requests to Lectio, and returns the binary response as Base64.
    * It is recommended to use this function when downloading files
    */
   abstract async DownloadLectio(url: string): Promise<LectioResponse>;
-
 }

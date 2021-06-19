@@ -79,11 +79,11 @@ export class NodeRequest extends LectioRequest {
         {
           url: url,
           jar: true,
-          encoding: null
+          encoding: null,
         },
         (err: any, res: any) => {
           if (err || !res || !res.body || !res.headers) reject(err);
-          resolve({ data: Buffer.from(res.body, "binary").toString('base64'), headers: res.headers });
+          resolve({ data: Buffer.from(res.body, 'binary').toString('base64'), headers: res.headers });
         },
       );
     });
