@@ -72,4 +72,20 @@ export class NodeRequest extends LectioRequest {
       );
     });
   }
+
+  async DownloadLectio(url: string): Promise<LectioResponse> {
+    return new Promise(async (resolve, reject) => {
+      request.get(
+        {
+          url: url,
+          jar: true,
+          encoding: null
+        },
+        (err: any, res: any) => {
+          if (err || !res || !res.body || !res.headers) reject(err);
+          resolve({ data: Buffer.from(res.body, "binary").toString('base64'), headers: res.headers });
+        },
+      );
+    });
+  }
 }
